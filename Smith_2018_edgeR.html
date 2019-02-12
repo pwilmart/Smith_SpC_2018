@@ -15187,7 +15187,7 @@ AElFTkSuQmCC"
 <div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="Cutoff-of-2.5-looks-pretty-good">Cutoff of 2.5 looks pretty good<a class="anchor-link" href="#Cutoff-of-2.5-looks-pretty-good">&#182;</a></h3><p>The fraction of data with missing values starts to rise at an average SpC of about 5.0. The missing data really starts to rise at average SpC values below 2.0. We usually want to cast a wide net for differential expression candidates in discovery experiments. A cutoff of 2.5 seems like a reasonable compromise. We might get some false positives near the cutoff, but those will be easy to catch manually later.</p>
 <hr>
-<p>The data exported in the <code>edgeR_input.txt</code> file excluded contaminants, decoys, and any proteins with an average SpC of less than 2.5. We will read that data in and separate the accessions from the count data.</p>
+<h3 id="Read-in-the-data">Read in the data<a class="anchor-link" href="#Read-in-the-data">&#182;</a></h3><p>The data exported in the <code>edgeR_input.txt</code> file excluded contaminants, decoys, and any proteins with an average SpC of less than 2.5. We will read that data in and separate the accessions from the count data.</p>
 
 </div>
 </div>
@@ -15282,17 +15282,20 @@ cols(
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>The sample codes are HCEC for human choroidal endothelial cells and HREC for human retinal endothelial cells. The numbers are the 5 subject codes.</p>
-<h3 id="Are-we-&quot;losing&quot;-out-by-having-a-minimum-SpC-cutoff?">Are we "losing" out by having a minimum SpC cutoff?<a class="anchor-link" href="#Are-we-&quot;losing&quot;-out-by-having-a-minimum-SpC-cutoff?">&#182;</a></h3><p>It depends a little on how you approach protein FDR, but we have about 5000 protein IDs. After the 2.5 average SpC cutoff, we are down to 3454. Is this an issue? The answer is no. Counting things by the number of proteins can lead to erroneous conclusions. We have 10 samples and we can tally some things based on in how many samples were proteins seen: all 10 out of the 10, any 9 out of the 10, etc. I did that in Excel and made a short table.</p>
+<h3 id="Are-we-&quot;losing-out&quot;-by-having-a-minimum-SpC-cutoff?">Are we "losing out" by having a minimum SpC cutoff?<a class="anchor-link" href="#Are-we-&quot;losing-out&quot;-by-having-a-minimum-SpC-cutoff?">&#182;</a></h3><p>Depending a little on how you approach protein FDR, we have about 5000 protein IDs. After the 2.5 average SpC cutoff, we are down to 3454. Is this an issue? The answer is no. Counting things by the number of proteins can lead to erroneous conclusions. We have 10 samples and we can tally some things based on in how many samples were the proteins seen: all 10 out of the 10, any 9 out of the 10, etc. I did that in Excel and made a short table.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[20]:</div>
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-r"><pre><span></span><span class="n">freq</span> <span class="o">&lt;-</span> <span class="nf">read_tsv</span><span class="p">(</span><span class="s">&quot;Fractions_SpC_ID.txt&quot;</span><span class="p">)</span>
+<div class=" highlight hl-r"><pre><span></span><span class="c1"># read in short table</span>
+<span class="n">freq</span> <span class="o">&lt;-</span> <span class="nf">read_tsv</span><span class="p">(</span><span class="s">&quot;Fractions_SpC_ID.txt&quot;</span><span class="p">)</span>
+
+<span class="c1"># make a bar plot to summarize the data</span>
 <span class="nf">ggplot</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">InHowMany</span><span class="p">,</span> <span class="n">Fraction</span><span class="p">,</span> <span class="n">fill</span> <span class="o">=</span> <span class="n">Measure</span><span class="p">))</span> <span class="o">+</span>
   <span class="nf">geom_bar</span><span class="p">(</span><span class="n">stat</span> <span class="o">=</span> <span class="s">&quot;identity&quot;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s">&quot;black&quot;</span><span class="p">,</span> <span class="n">position</span> <span class="o">=</span> <span class="nf">position_dodge</span><span class="p">())</span> <span class="o">+</span>
   <span class="nf">geom_text</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">label</span> <span class="o">=</span> <span class="n">Fraction</span><span class="p">),</span> <span class="n">vjust</span> <span class="o">=</span> <span class="m">1.6</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s">&quot;black&quot;</span><span class="p">,</span>

@@ -33,7 +33,10 @@ paw_spc <- select(paw_spc, -Accession)
 head(paw_spc)
 nrow(paw_spc)
 
+# read in short table
 freq <- read_tsv("Fractions_SpC_ID.txt")
+
+# make a bar plot to summarize the data
 ggplot(freq, aes(InHowMany, Fraction, fill = Measure)) +
   geom_bar(stat = "identity", color = "black", position = position_dodge()) +
   geom_text(aes(label = Fraction), vjust = 1.6, color = "black",
