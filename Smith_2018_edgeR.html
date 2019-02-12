@@ -31706,7 +31706,7 @@ gAEDBgwYMGDAgAEDBgwYMGBgOhBhCqJX6DsOnQAAAABJRU5ErkJggg=="
 <span class="n">paired</span> <span class="o">&lt;-</span> <span class="nf">glmQLFTest</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span> <span class="c1"># default comparison</span>
 
 <span class="c1"># check test results</span>
-<span class="nf">topTags</span><span class="p">(</span><span class="n">paired</span><span class="p">)</span>
+<span class="nf">topTags</span><span class="p">(</span><span class="n">paired</span><span class="p">)</span><span class="o">$</span><span class="n">table</span>
 <span class="n">tt</span> <span class="o">&lt;-</span> <span class="nf">topTags</span><span class="p">(</span><span class="n">paired</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="kc">Inf</span><span class="p">,</span> <span class="n">sort.by</span> <span class="o">=</span> <span class="s">&quot;none&quot;</span><span class="p">)</span><span class="o">$</span><span class="n">table</span>
 <span class="nf">summary</span><span class="p">(</span><span class="nf">decideTests</span><span class="p">(</span><span class="n">paired</span><span class="p">,</span> <span class="n">p.value</span> <span class="o">=</span> <span class="m">0.10</span><span class="p">))</span>
 </pre></div>
@@ -31726,9 +31726,7 @@ gAEDBgwYMGDAgAEDBgwYMGBgOhBhCqJX6DsOnQAAAABJRU5ErkJggg=="
 
 
 <div class="output_html rendered_html output_subarea ">
-<dl>
-	<dt>$table</dt>
-		<dd><table>
+<table>
 <thead><tr><th></th><th scope=col>genes</th><th scope=col>logFC</th><th scope=col>logCPM</th><th scope=col>F</th><th scope=col>PValue</th><th scope=col>FDR</th></tr></thead>
 <tbody>
 	<tr><th scope=row>533</th><td>sp|P00352|AL1A1_HUMAN</td><td>-7.667110            </td><td>8.651386             </td><td>494.0805             </td><td>9.205467e-21         </td><td>3.179568e-17         </td></tr>
@@ -31743,14 +31741,6 @@ gAEDBgwYMGDAgAEDBgwYMGBgOhBhCqJX6DsOnQAAAABJRU5ErkJggg=="
 	<tr><th scope=row>366</th><td>sp|Q9Y3Z3|SAMH1_HUMAN</td><td> 1.624241            </td><td>9.136414             </td><td>120.8519             </td><td>2.739599e-12         </td><td>9.462577e-10         </td></tr>
 </tbody>
 </table>
-</dd>
-	<dt>$adjust.method</dt>
-		<dd>'BH'</dd>
-	<dt>$comparison</dt>
-		<dd>'cellR'</dd>
-	<dt>$test</dt>
-		<dd>'glm'</dd>
-</dl>
 
 </div>
 

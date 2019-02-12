@@ -171,7 +171,7 @@ plotQLDisp(fit)
 paired <- glmQLFTest(fit) # default comparison
 
 # check test results
-topTags(paired)
+topTags(paired)$table
 tt <- topTags(paired, n = Inf, sort.by = "none")$table
 summary(decideTests(paired, p.value = 0.10))
 
