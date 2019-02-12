@@ -33,6 +33,15 @@ paw_spc <- select(paw_spc, -Accession)
 head(paw_spc)
 nrow(paw_spc)
 
+freq <- read_tsv("Fractions_SpC_ID.txt")
+ggplot(freq, aes(InHowMany, Fraction, fill = Measure)) +
+  geom_bar(stat = "identity", color = "black", position = position_dodge()) +
+  geom_text(aes(label = Fraction), vjust = 1.6, color = "black",
+            position = position_dodge(0.9), size = 2.5) +
+  scale_x_continuous( breaks = 1:10) +
+  ggtitle("Fractions of total spectra counts or of total identifications") +
+  xlab("In How Many Samples") + ylab("Fraction (%)")
+
 # function for simple normalization
 SL_Norm <- function(df, color = NULL, plot = TRUE) {
     # This makes each channel sum to the average grand total
