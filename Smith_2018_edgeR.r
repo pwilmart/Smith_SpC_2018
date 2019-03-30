@@ -109,8 +109,8 @@ apply_tmm_factors <- function(y, color = NULL, plot = TRUE) {
 
 paw_spc_tmm <- apply_tmm_factors(y, color)
 
-# check clustering (6 different out of 1748 may not do much)
-plotMDS(y)
+# check clustering
+plotMDS(y, col = color, main = "Retina vs Choroid")
 
 CV <- function(df) {
     # Computes CVs of data frame rows
