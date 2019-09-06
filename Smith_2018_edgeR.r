@@ -135,9 +135,9 @@ labeled_boxplot <- function(df, ylim, title) {
 # see what effect TMM had on CV distributions
 par(mfrow = c(2, 2))
 labeled_boxplot(paw_spc[C], 150, "Choroid before")
-labeled_boxplot(paw_spc[C], 150, "Retina before")
+labeled_boxplot(paw_spc[R], 150, "Retina before")
 labeled_boxplot(paw_spc_tmm[C], 150, "Choroid after")
-labeled_boxplot(paw_spc_tmm[C], 150, "Retina after")
+labeled_boxplot(paw_spc_tmm[R], 150, "Retina after")
 par(mfrow = c(1, 1))
 
 group <- factor(c(rep("C", 5), rep("R", 5)))
@@ -360,6 +360,73 @@ volcano_plot <- function(results, x, y, title) {
 
 # make a volcano plot
 volcano_plot(results, "ave_choroid", "ave_retina", "Choroid vs Retina")
+
+# ============== individual protein expression plots ===========================
+
+# function to extract the identifier part of the accesssion
+get_identifier <- function(accession) {
+    identifier <- str_split(accession, "\\|", simplify = TRUE)
+    identifier[,3]
+}
+
+set_plot_dimensions <- function(width_choice, height_choice) {
+    options(repr.plot.width=width_choice, repr.plot.height=height_choice)
+}
+
+plot_candidates <- function(results, nleft, nright, show_these = c("high", "med", "low")) {
+    # results should have data first, then test results (two condition summary table)
+    # nleft, nright are number of data points in each condition
+    # top_tags is number of up and number of down top DE candidates to plot
+    
+    # get desired candidates
+    proteins <- proteins %>% 
+        filter(candidate %in% show_these) %>% arrange(candidate)
+        
+    color = c(rep("red", nleft), rep("blue", nright))
+    for (row_num in 1:nrow(proteins)) {
+        row <- proteins[row_num, ]
+        vec <- as.vector(unlist(row[1:(nleft + nright)]))
+        names(vec) <- colnames(row[1:(nleft + nright)])
+        title <- str_c(get_identifier(row$Acc), ", int: ", scientific(mean(vec), 2), 
+                       ", p-val: ", scientific(row$FDR, digits = 3), ", ", row$candidate)
+        barplot(vec, col = color, main = title)
+    } 
+}
+
+plot_top_tags <- function(results, nleft, nright, top_tags) {
+    # results should have data first, then test results (two condition summary table)
+    # nleft, nright are number of data points in each condition
+    # top_tags is number of up and number of down top DE candidates to plot
+    # get top ipregulated
+    up <- results %>% 
+        filter(logFC >= 0) %>%
+        arrange(FDR)
+    up <- up[1:top_tags, ]
+    
+    # get top down regulated
+    down <- results %>% 
+        filter(logFC < 0) %>%
+        arrange(FDR)
+    down <- down[1:top_tags, ]
+    
+    # pack them
+    proteins <- rbind(up, down)
+        
+    color = c(rep("red", nleft), rep("blue", nright))
+    for (row_num in 1:nrow(proteins)) {
+        row <- proteins[row_num, ]
+        vec <- as.vector(unlist(row[1:(nleft + nright)]))
+        names(vec) <- colnames(row[1:(nleft + nright)])
+        title <- str_c(get_identifier(row$Acc), ", int: ", scientific(mean(vec), 2), 
+                       ", p-val: ", scientific(row$FDR, digits = 3), 
+                       ", FC: ", round(row$FC, digits = 1))
+        barplot(vec, col = color, main = title)
+    }    
+}
+# plot the top 25 up and 20 down proteins
+set_plot_dimensions(6, 3.5)
+plot_top_tags(results, 5, 5, 25)
+set_plot_dimensions(7, 7)
 
 # write results
 write.table(results, "edgeR_results.txt", sep = "\t", row.names = FALSE, na = " ")
